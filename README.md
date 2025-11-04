@@ -18,29 +18,29 @@ In addition to personalized movie discovery, the application enables users to bo
 
 **Use Case 1: User Authentication (Log in/Sign up)**
 • Main Flow: 
-o User opens the application and selects Log in/ Sign up. []
+o User opens the application and selects Log in/ Sign up. 
 
-o System prompts the user to enter username and password. []
+o System prompts the user to enter username and password. 
 
-o If user selects “Log in”, system confirms user authentication and loads the main page. []
+o If user selects “Log in”, system confirms user authentication and loads the main page. 
 
-o If user selects “Sign up”, system validates input and stores user information and loads the main page. []
+o If user selects “Sign up”, system validates input and stores user information and loads the main page. 
 
 
 • Alternative Flows: 
-o If incorrect information when “Log in” → system displays “invalid username/password”. []
+o If incorrect information when “Log in” → system displays “invalid username/password”. 
 
-o If account already exists when “Sign up” → system displays “account exists”. []
+o If account already exists when “Sign up” → system displays “account exists”. 
 
 
 **Use Case 2: Search Movies**
 • Main Flow: 
 
-o User enters a movie title in the Search bar. []
+o User enters a movie title in the Search bar. 
 
-o System retrieves the information using an external API. []
+o System retrieves the information using an external API. 
 
-o System displays movies with title, poster, rating. []
+o System displays movies with title, poster, rating. 
 
     User can view more detailed information about the movie:
       - Movie title []
@@ -52,71 +52,106 @@ o System displays movies with title, poster, rating. []
       - Cast? Optional []
 
 • Alternative Flows: 
-o If no movies found → system shows “No movies found” []
+
+o If no movies found → system shows “No movies found” 
 
 **Use Case 3: Get Recommended Movies**
 • Main Flow: 
-o User clicks “Recommend Movies”. []
-o System displays different filters such as rating, genre, and release date. []
-o User selects these filters. []
-o System displays movies with title, poster, rating. []
+
+o User clicks “Recommend Movies”. 
+
+o System displays different filters such as rating, genre, and release date. 
+
+o User selects these filters.
+
+o System displays movies with title, poster, rating. 
 
 • Alternative Flows: 
-o If with the selected filters there are no results → system displays “no matches found” []
-- User can view more detailed information about the movie [] (same as US 2)
+
+o If with the selected filters there are no results → system displays “no matches found” 
+
+- User can view more detailed information about the movie (same as US 2)
 
 **Use Case 4: Browse Movies **
 • Main Flow: 
-o User navigates “Trending” tab. []
-User selects between top-rated, upcoming and popular categories. []
-o System retrieves trending using API call. []
-o System displays movies with title, poster, rating. []
+
+o User navigates “Trending” tab.
+
+User selects between top-rated, upcoming and popular categories. 
+
+o System retrieves trending using API call. 
+
+o System displays movies with title, poster, rating. 
+
 
 • Alternative Flows: 
-o If there are no trending movies at the time, the system displays the message “No movies available” []
+
+o If there are no trending movies at the time, the system displays the message “No movies available” 
+
 User can view more detailed information about the movie (same as US 2)
+
 
 **Use Case 5: Manage Watchlist**
 • Main Flow: 
-o Whenever a movie is displayed to a user, there is the button “Add to watchlist” []
-o User clicks “Add to Watchlist”. []
-o System adds the movie to the user’s watchlist. []
-o User can open the watchlist to view watchlisted movies and mark movies as “Watched”. []
+
+o Whenever a movie is displayed to a user, there is the button “Add to watchlist” 
+
+o User clicks “Add to Watchlist”. 
+
+o System adds the movie to the user’s watchlist. 
+
+o User can open the watchlist to view watchlisted movies and mark movies as “Watched”. 
+
 
 • Alternative Flows: 
-o If a movie already exists in the watchlist → system displays “Already in Watchlist”. []
+
+o If a movie already exists in the watchlist → system displays “Already in Watchlist”. 
+
 
 **Use Case 6: Book Movie Tickets**
 • Main Flow: 
-On the booking page, user selects a cinema. []
-o A list of movies playing at this cinema is displayed. []
-o System shows date and time and the seat map. []
-o User selects the cinema, movie, date and time, and seats. []
+
+On the booking page, user selects a cinema. 
+
+o A list of movies playing at this cinema is displayed. 
+
+o System shows date and time and the seat map. 
+
+o User selects the cinema, movie, date and time, and seats. 
+
 User clicks “Book”. 
-o Payment done. System displays a booking confirmation. []
+
+o Payment done. System displays a booking confirmation. 
+
 
 • Alternative Flows: 
-o If selected seats are not available → system prompts to select different seats. []
+
+o If selected seats are not available → system prompts to select different seats. 
 
 **Use Case 7: Sort Watchlist**
 • Main Flow: 
+
 User goes to their watchlist
-User selects a filter that they want to use (e.g., ratings, release year, alphabetical order) []
-System displays sorted movies in the watchlist []
+
+User selects a filter that they want to use (e.g., ratings, release year, alphabetical order) 
+
+System displays sorted movies in the watchlist 
 
 • Alternative Flows: 
-If there are no filters selected, the default watchlist is presented when the user goes to their watchlist, in the order the movies were added []
+
+If there are no filters selected, the default watchlist is presented when the user goes to their watchlist, in the order the movies were added 
+
 
 
 
 **MVP**
 
 The Minimum Viable Product for the CineSphere application will focus on delivering a functional movie recommendation and booking experience that allows users to:
-- Log in []
-- Search for movies []
-- Get recommended movies []
-- Manage a personal watchlist []
-- Make simple ticket reservations in cinemas []
+- Log in 
+- Search for movies 
+- Get recommended movies 
+- Manage a personal watchlist 
+- Make simple ticket reservations in cinemas 
 
 _Use Cases 4, and 7 having a trending movie list and sorting the watchlist
 are not part of the MVP but are planned for future development if time allows. 
