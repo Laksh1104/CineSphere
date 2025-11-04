@@ -71,7 +71,7 @@ In addition to personalized movie discovery, the application enables users to bo
   
   User can view more detailed information about the movie (same as US 2)
 
-**Use Case 4: Browse Movies **
+**Use Case 4: Browse Movies**
 - Main Flow: 
 
   - User navigates “Trending” tab.
