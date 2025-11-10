@@ -83,6 +83,11 @@ public class LandingPage {
                 "https://image.tmdb.org/t/p/original/v9NLaLBbrkDwq44qG51v8T6sPuI.jpg",
                 "https://image.tmdb.org/t/p/original/pHpq9yNUIo6aDoCXEBzjSolywgz.jpg",
                 "https://image.tmdb.org/t/p/original/xR0IhVBjbNU34b8erhJCgRbjXo3.jpg",
+                "https://image.tmdb.org/t/p/original/c4QA1rFQcyBZKaOOdUrDeL1G9Er.jpg",
+                "https://image.tmdb.org/t/p/original/yvirUYrva23IudARHn3mMGVxWqM.jpg",
+                "https://image.tmdb.org/t/p/original/fWVSwgjpT2D78VUh6X8UBd2rorW.jpg",
+                "https://image.tmdb.org/t/p/original/bcP7FtskwsNp1ikpMQJzDPjofP5.jpg",
+                "https://image.tmdb.org/t/p/original/bYe2ZjUhb4Kje0BpWE6kN34u2hv.jpg"
         };
 
         JPanel moviePanel = new JPanel();
