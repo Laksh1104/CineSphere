@@ -19,6 +19,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.json/json
     implementation("org.json:json:20250517")
+
+    implementation("io.github.cdimascio:dotenv-java:3.2.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

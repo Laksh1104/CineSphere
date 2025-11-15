@@ -1,6 +1,7 @@
 package app;
 
 import entity.Movie;
+import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,7 +21,8 @@ import java.util.List;
  */
 public class TMDBMovieDetailsGateway implements MovieDetailsGateway {
 
-    private static final String API_KEY = System.getenv("TMDB_API_KEY"); // set this in your environment
+    private static final Dotenv DOTENV = Dotenv.load();
+    private static final String API_KEY = DOTENV.get("TMDB_API_KEY");
     private static final String BASE = "https://api.themoviedb.org/3";
     // Image base kept for future use when you show posters:
     private static final String IMG_BASE = "https://image.tmdb.org/t/p/w500";
@@ -96,6 +98,6 @@ public class TMDBMovieDetailsGateway implements MovieDetailsGateway {
     }
 
     public static void main(String[] args) {
-
+        System.out.println(API_KEY);
     }
 }
