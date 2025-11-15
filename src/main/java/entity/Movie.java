@@ -5,8 +5,16 @@ public class Movie {
     private final String film_name;
 
     public Movie(int filmId, String filmName) {
-        film_id = filmId;
-        film_name = filmName;
+        this.film_id = filmId;
+        this.film_name = filmName;
+    }
+
+    public int getFilmId() {
+        return film_id;
+    }
+
+    public String getFilmName() {
+        return film_name;
     }
 
 }
