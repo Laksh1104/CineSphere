@@ -1,4 +1,4 @@
-package view;
+package app;
 
 public class MoviePosterBuilder {
     private static final String base_URL = "https://image.tmdb.org/t/p/w500";
