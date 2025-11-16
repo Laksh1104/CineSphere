@@ -86,14 +86,14 @@ public class TMDBMovieDetailsGateway implements MovieDetailsGateway {
             }
 
             // (Optional) Reviews if/when you want them:
-            // JSONArray reviews = j.optJSONObject("reviews") != null
-            //         ? j.getJSONObject("reviews").optJSONArray("results")
-            //         : null;
+             JSONArray reviews = j.optJSONObject("reviews") != null
+                     ? j.getJSONObject("reviews").optJSONArray("results")
+                     : null;
 
             // ----- Return your current entity (id + name) -----
             // Later, when you expand Movie or add a MovieDetails DTO,
             // use the parsed variables above (title, releaseDate, director, ratingOutOf5, genres, overview, posterUrl).
-            return new Movie(movieId, title);
+            return new Movie(movieId, title, director, releaseDate, ratingOutOf5, genres, overview, reviews, posterUrl);
         }
     }
 
