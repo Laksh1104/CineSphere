@@ -9,4 +9,10 @@ public class Movie {
         film_name = filmName;
     }
 
+    public String getFilmName() {
+        return film_name;
+    }
+    public int getFilmId() {
+        return film_id;
+    }
 }
