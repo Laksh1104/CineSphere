@@ -41,4 +41,8 @@ public class BookMovieController {
         // Call the interactor
         BookMovieUseCaseInteractor.execute(inputData);
     }
+
+    public Set<String> getBookedSeats(Movie m, Cinema c, String date, ShowTime st) {
+        return BookMovieUseCaseInteractor.getBookedSeats(m, c, date, st);
+    }
 }

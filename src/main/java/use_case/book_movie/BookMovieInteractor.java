@@ -5,17 +5,19 @@ import entity.Movie;
 import entity.Cinema;
 import entity.ShowTime;
 
+import java.util.Set;
+
 /**
  * The Book Movie Interactor.
  */
 public class BookMovieInteractor implements BookMovieInputBoundary {
 
-    private final BookMovieDataAccessInterface ticketDataAccessObject;
+    private final BookTicketDataAccessInterface ticketDataAccessObject;
     private final BookMovieOutputBoundary bookingPresenter;
 
-    public BookMovieInteractor(BookMovieDataAccessInterface dao,
+    public BookMovieInteractor(BookTicketDataAccessInterface ticketdao,
                                BookMovieOutputBoundary presenter) {
-        this.ticketDataAccessObject = dao;
+        this.ticketDataAccessObject = ticketdao;
         this.bookingPresenter = presenter;
     }
 
@@ -37,17 +39,19 @@ public class BookMovieInteractor implements BookMovieInputBoundary {
         int totalCost = seatCount * costPerSeat;
 
         // Create ticket entity
-        MovieTicket ticket = new MovieTicket(
-                movie,
-                cinema,
-                date,
-                showtime,
-                inputData.getSeats(),
-                totalCost
+        MovieTicket ticket = new MovieTicket(movie, cinema, date, showtime, inputData.getSeats(), totalCost
         );
 
-        // Save ticket using DAO
-        // ticketDataAccessObject.save(ticket);
+        // save booking
+        ticketDataAccessObject.saveBooking(ticket);
+
+        // get updated booked seats for this showtime
+        Set<String> bookedSeats = ticketDataAccessObject.getBookedSeats(
+                inputData.getMovie(),
+                inputData.getCinema(),
+                inputData.getDate(),
+                inputData.getShowtime()
+        );
 
         // Create Output Data for presenter
         BookMovieOutputData outputData = new BookMovieOutputData(
@@ -55,10 +59,15 @@ public class BookMovieInteractor implements BookMovieInputBoundary {
                 date,
                 cinema,
                 showtime,
-                inputData.getSeats(),
+                bookedSeats,
                 totalCost
         );
 
         bookingPresenter.prepareSuccessView(outputData);
+    }
+
+    @Override
+    public Set<String> getBookedSeats(Movie m, Cinema c, String date, ShowTime st) {
+        return ticketDataAccessObject.getBookedSeats(m, c, date, st);
     }
 }

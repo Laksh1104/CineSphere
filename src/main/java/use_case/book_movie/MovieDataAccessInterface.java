@@ -4,7 +4,7 @@ import entity.Movie;
 
 import java.util.List;
 
-public interface BookMovieDataAccessInterface {
+public interface MovieDataAccessInterface {
     List<Movie> getNowShowingMovies();
 
 }

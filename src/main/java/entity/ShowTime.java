@@ -11,4 +11,9 @@ public class ShowTime {
 
     public String getStartTime() { return startTime; }
     public String getEndTime() { return endTime; }
+
+    @Override
+    public String toString() {
+        return startTime + " - " + endTime;
+    }
 }

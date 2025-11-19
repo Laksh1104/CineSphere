@@ -4,13 +4,11 @@ import entity.Cinema;
 import entity.CinemaFactory;
 import entity.Movie;
 import entity.MovieFactory;
-import interface_adapter.BookMovie.BookMovieViewModel;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import use_case.book_movie.CinemaDataAccessInterface;
-import view.BookingView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -29,10 +27,10 @@ public class CinemaDataAccessObject implements CinemaDataAccessInterface {
 
     // MovieGlu API headers (align with your Movie DAO)
     private static final String API_VERSION = "v201";
-    private static final String AUTHORIZATION = "Basic VU9GVDpyeEF6ZVA0TEZiUmc=";
-    private static final String CLIENT = "UOFT";
-    private static final String X_API_KEY = "0o7Xqd0mnOaiVBT4QrwOrMi6MdSycNG3OgNDWe1b";
-    private static final String TERRITORY = "CA";
+    private static final String AUTHORIZATION = "Basic VU5JVl84M19YWDpIbGtDWHRCeDAwZjk=";
+    private static final String CLIENT = "UNIV_83";
+    private static final String X_API_KEY = "3k2LXALJ12aNVHv5o0QOL4v63Q25zG7rasLjUTKb";
+    private static final String TERRITORY = "XX";
     private static final String DEVICE_DATETIME = ZonedDateTime.now(java.time.ZoneOffset.UTC)
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
     public static final String TEST_GEOLOCATION = " -22.0;14.0";
@@ -63,7 +61,7 @@ public class CinemaDataAccessObject implements CinemaDataAccessInterface {
                 .addHeader("x-api-key", X_API_KEY)
                 .addHeader("device-datetime", DEVICE_DATETIME)
                 .addHeader("territory", TERRITORY)
-                .addHeader("geolocation", geolocation)
+                .addHeader("geolocation", TEST_GEOLOCATION)
                 .addHeader(CONTENT_TYPE_JSON, CONTENT_TYPE_JSON)
                 .build();
 
@@ -138,7 +136,7 @@ public class CinemaDataAccessObject implements CinemaDataAccessInterface {
         CinemaFactory cinemaFactory = new CinemaFactory();
         MovieFactory movieFactory = new MovieFactory();
         CinemaDataAccessObject cinemaDataAccessObject = new CinemaDataAccessObject(cinemaFactory);
-        MovieDataAccessObject movieDataAccessObject = new MovieDataAccessObject(movieFactory);
+        BookingMovieDataAccessObject movieDataAccessObject = new BookingMovieDataAccessObject(movieFactory);
         List<Movie> movies = movieDataAccessObject.getNowShowingMovies();
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
        for  (Movie movie : movies) {

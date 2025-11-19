@@ -20,18 +20,23 @@ public class SeatSelectionPanel extends JPanel {
     private final JLabel selectedSeatsLabel;
 
     public SeatSelectionPanel(Set<String> unavailableSeats) {
-        setLayout(new BorderLayout());
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(COLOR);
+
         JPanel grid = createSeatGrid(unavailableSeats);
-        grid.setBackground(COLOR); // set grid panel background
-        setBackground(COLOR);      // set main panel background
-        add(grid, BorderLayout.CENTER);
+        grid.setBackground(COLOR);
+        // Left align both components
+        grid.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(grid);
+        add(Box.createVerticalStrut(10)); // 10px gap
 
 
         selectedSeatsLabel = new JLabel("Selected Seats: ");
         selectedSeatsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        selectedSeatsLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        add(selectedSeatsLabel, BorderLayout.SOUTH);
+
+        add(selectedSeatsLabel);
     }
+
 
     private JPanel createSeatGrid(Set<String> unavailableSeats) {
         JPanel panel = new JPanel(new GridBagLayout());

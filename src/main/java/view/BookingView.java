@@ -1,7 +1,7 @@
 package view;
 
 import data_access.CinemaDataAccessObject;
-import data_access.MovieDataAccessObject;
+import data_access.BookingMovieDataAccessObject;
 import entity.*;
 import interface_adapter.BookMovie.BookMovieViewModel;
 import interface_adapter.BookMovie.BookMovieState;
@@ -45,6 +45,7 @@ public class BookingView extends JPanel implements PropertyChangeListener {
 
         setupHeader();
         setupSelectionPanel();
+
         setupSeatPanel();
         setupBookButton();
     }
@@ -54,8 +55,11 @@ public class BookingView extends JPanel implements PropertyChangeListener {
     }
 
     private void setupHeader() {
+        add(Box.createVerticalStrut(10)); // 10px gap
+
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         headerPanel.setBackground(COLOR);
+        headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 10000));
 
         JLabel title = new JLabel("CineSphere");
         title.setFont(new Font("Arial", Font.BOLD, 20));
@@ -72,6 +76,7 @@ public class BookingView extends JPanel implements PropertyChangeListener {
         headerPanel.add(logoutButton);
 
         add(headerPanel);
+
     }
 
     private void setupSelectionPanel() {
@@ -87,6 +92,7 @@ public class BookingView extends JPanel implements PropertyChangeListener {
             String movieName = (String) movieDropdown.getSelectedItem();
             if (movieName != null && !movieName.equals("Select Movie")) {
                 selectedMovie = getMovieObject(movieName);
+
                 populateCinemas(selectedMovie.getFilmId(), selectedDate);
 
                 BookMovieState state = bookMovieViewModel.getState();
@@ -115,6 +121,7 @@ public class BookingView extends JPanel implements PropertyChangeListener {
             Date date = dateChooser.getDate();
             if (date != null) {
                 selectedDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+
                 populateCinemas(selectedMovie.getFilmId(), selectedDate);
 
                 BookMovieState state = bookMovieViewModel.getState();
@@ -134,8 +141,10 @@ public class BookingView extends JPanel implements PropertyChangeListener {
 
         theaterDropdown.addActionListener(e -> {
             String cinemaName = (String) theaterDropdown.getSelectedItem();
+
             if (cinemaName != null && !cinemaName.equals("Select Cinema") && selectedMovie != null) {
                 selectedCinema = getCinemaObject(cinemaName, selectedMovie.getFilmId(), selectedDate);
+
                 populateShowTime(selectedCinema);
 
                 BookMovieState state = bookMovieViewModel.getState();
@@ -152,6 +161,12 @@ public class BookingView extends JPanel implements PropertyChangeListener {
         timePanel.add(new JLabel("Time: "), BorderLayout.WEST);
         timePanel.add(timeDropdown, BorderLayout.CENTER);
 
+        timeDropdown.addActionListener(e -> {
+            selectedShowtime = getSelectedShowtime();
+            updateSeatGridForCurrentSelection();
+        });
+
+
 
         selectionPanel.add(moviePanel);
         selectionPanel.add(datePanel);
@@ -161,17 +176,31 @@ public class BookingView extends JPanel implements PropertyChangeListener {
     }
 
     private void setupSeatPanel() {
+
         JPanel seatPanelContainer = new JPanel();
         seatPanelContainer.setLayout(new BoxLayout(seatPanelContainer, BoxLayout.Y_AXIS));
         seatPanelContainer.setBackground(COLOR);
 
+        // Add vertical spacing above
+        seatPanelContainer.add(Box.createVerticalStrut(15));
+
         JLabel seatsLabel = new JLabel("Seating Arrangement:");
         seatsLabel.setFont(new Font("Arial", Font.BOLD, 18));
+
         seatPanel = new SeatSelectionPanel(Collections.emptySet());
 
         seatPanelContainer.add(seatsLabel);
+        // Add vertical spacing below
+        seatPanelContainer.add(Box.createVerticalStrut(15));
+
         seatPanelContainer.add(seatPanel);
-        add(seatPanelContainer);
+
+        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        wrapper.setBackground(COLOR);
+        wrapper.add(seatPanelContainer);
+
+        add(wrapper);
+
     }
 
     private void setupBookButton() {
@@ -205,7 +234,7 @@ public class BookingView extends JPanel implements PropertyChangeListener {
             }
         });
 
-        JPanel bookButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel bookButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bookButtonPanel.setBackground(COLOR);
         bookButtonPanel.add(bookMovieButton);
         add(bookButtonPanel);
@@ -240,7 +269,7 @@ public class BookingView extends JPanel implements PropertyChangeListener {
 
     private void populateMovies() {
         MovieFactory movieFactory = new MovieFactory();
-        MovieDataAccessObject movieDAO = new MovieDataAccessObject(movieFactory);
+        BookingMovieDataAccessObject movieDAO = new BookingMovieDataAccessObject(movieFactory);
         List<Movie> movies = movieDAO.getNowShowingMovies();
 
         movies.sort(Comparator.comparing(Movie::getFilmName));
@@ -252,7 +281,7 @@ public class BookingView extends JPanel implements PropertyChangeListener {
 
     private Movie getMovieObject(String film_name){
         MovieFactory movieFactory = new MovieFactory();
-        MovieDataAccessObject movieDAO = new MovieDataAccessObject(movieFactory);
+        BookingMovieDataAccessObject movieDAO = new BookingMovieDataAccessObject(movieFactory);
         List<Movie> movies = movieDAO.getNowShowingMovies();
         for  (Movie movie : movies) {
             if(movie.getFilmName().equals(film_name)) {
@@ -313,5 +342,30 @@ public class BookingView extends JPanel implements PropertyChangeListener {
         }
 
     }
+
+    private void refreshSeatPanel(SeatSelectionPanel newPanel) {
+        Container parent = seatPanel.getParent();
+        parent.remove(seatPanel);
+        seatPanel = newPanel;
+        parent.add(seatPanel);
+        parent.revalidate();
+        parent.repaint();
+    }
+
+    private void updateSeatGridForCurrentSelection() {
+        if (selectedMovie == null || selectedCinema == null || selectedShowtime == null)
+          return;
+
+        Set<String> unavailable = bookMovieController.getBookedSeats(
+                selectedMovie,
+                selectedCinema,
+                selectedDate,
+                selectedShowtime
+        );
+
+        SeatSelectionPanel newPanel = new SeatSelectionPanel(unavailable);
+        refreshSeatPanel(newPanel);
+    }
+
 
 }
