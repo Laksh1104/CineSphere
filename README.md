@@ -224,7 +224,6 @@ MovieGlu (https://developer.movieglu.com/v2/api-index/cinemasnearby/)
 Latitude and longitude from the API above is passed to this API to get a list of the cinemas nearby to be used when booking tickets.
 Status: Successfully tested with OKHttp in Java
 
-
 Nov 3 
 UI Layout of Landing Page
 Nov 7
