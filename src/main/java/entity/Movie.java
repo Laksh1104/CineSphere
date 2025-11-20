@@ -11,6 +11,11 @@ public class Movie {
         this.posterPath = posterPath;
     }
 
+    public String getFilmName() {
+        return film_name;
+    }
+    public int getFilmId() {
+        return film_id;
     public String getTitle() {
 
         return title;
