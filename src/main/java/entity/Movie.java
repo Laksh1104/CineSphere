@@ -1,12 +1,18 @@
 package entity;
 
-public class Movie {
-    private final int film_id;
-    private final String film_name;
+import org.json.JSONArray;
+import java.util.List;
 
-    public Movie(int filmId, String filmName) {
-        film_id = filmId;
-        film_name = filmName;
-    }
+public record Movie(
+        int filmId,
+        String filmName,
+        String director,
+        String releaseDate,
+        double ratingOutOf5,
+        List<String> genres,
+        String description,
+        JSONArray reviews,
+        String posterUrl
+) {
 
 }
