@@ -1,9 +1,8 @@
 package view;
 
-import app.MoviePosterBuilder;
-import app.MovieExtractor;
-import app.TmdbAccess;
+import data_access.TmdbMovieDataAccessObject;
 import entity.Movie;
+import use_case.movie.MovieDataAccessInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -86,23 +85,12 @@ public class LoggedInView {
             popularFilmPanel.add(popularFilmTitle);
 
 
-
             String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMWVlMTM2Mzg0ZTcxYmM2ODFkOTYwOTNkYmJmMmFmNyIsIm5iZiI6MTc2MzI4MTgxNS45MDgsInN1YiI6IjY5MTk4Yjk3MmI5OWU3Yzc2OTRjYTU4MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.v-d4uaS-AsAb2Ymka2E5VFc9dsZ7xdQTuHAwNdSTOzI";
 
-            TmdbAccess tmdb = new TmdbAccess(token);
-            String json = tmdb.accessPopularMovieJson();
+            MovieDataAccessInterface movieDAO = new TmdbMovieDataAccessObject(token);
 
-            List<Movie> movies = MovieExtractor.extractPopularMovies(json);
-
-            MoviePosterBuilder posterBuilder = new MoviePosterBuilder();
-            List<String> posterUrls = new ArrayList<>();
-
-            for (Movie m: movies) {
-                String url = posterBuilder.buildPosterUrl(m.getPosterPath());
-                if (url != null) {
-                    posterUrls.add(url);
-                }
-            }
+            List<Movie> movies = movieDAO.getPopularMovies();
+            List<String> posterUrls = movieDAO.getPosterUrls(movies);
 
             JPanel moviePanel = new JPanel();
             moviePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 10));
@@ -118,35 +106,6 @@ public class LoggedInView {
                     e.printStackTrace();
                 }
             }
-
-
-
-//            String[] moviePosters = {
-//                    "https://image.tmdb.org/t/p/original/xUWUODKPIilQoFUzjHM6wKJkP3Y.jpg",
-//                    "https://image.tmdb.org/t/p/original/v9NLaLBbrkDwq44qG51v8T6sPuI.jpg",
-//                    "https://image.tmdb.org/t/p/original/pHpq9yNUIo6aDoCXEBzjSolywgz.jpg",
-//                    "https://image.tmdb.org/t/p/original/xR0IhVBjbNU34b8erhJCgRbjXo3.jpg",
-//                    "https://image.tmdb.org/t/p/original/c4QA1rFQcyBZKaOOdUrDeL1G9Er.jpg",
-//                    "https://image.tmdb.org/t/p/original/yvirUYrva23IudARHn3mMGVxWqM.jpg",
-//                    "https://image.tmdb.org/t/p/original/fWVSwgjpT2D78VUh6X8UBd2rorW.jpg",
-//                    "https://image.tmdb.org/t/p/original/bcP7FtskwsNp1ikpMQJzDPjofP5.jpg",
-//                    "https://image.tmdb.org/t/p/original/bYe2ZjUhb4Kje0BpWE6kN34u2hv.jpg"
-//            };
-//
-//            JPanel moviePanel = new JPanel();
-//            moviePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 10));
-//            moviePanel.setBackground(new Color(255, 255, 224));
-//
-//            for (String movie: moviePosters) {
-//                try {
-//                    ImageIcon icon = new ImageIcon(new URL(movie));
-//                    Image scaled = icon.getImage().getScaledInstance(200, 300, Image.SCALE_SMOOTH);
-//                    JLabel movieLabel = new JLabel(new ImageIcon(scaled));
-//                    moviePanel.add(movieLabel);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
 
             JScrollPane scrollPane = new JScrollPane(
                     moviePanel,
