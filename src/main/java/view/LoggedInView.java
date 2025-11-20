@@ -4,13 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-public class LoggedInView {
+public class LoggedInView extends JFrame {
 
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Background Display");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 800);
+    public LoggedInView(String username) {
+        this();
+    }
+    public LoggedInView() {
+        super("Background Display");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(900, 800);
 
         JPanel backgroundPanel = new JPanel();
         backgroundPanel.setBackground(new Color(255, 255, 224));
@@ -44,7 +46,6 @@ public class LoggedInView {
         JButton filterButton = new JButton("Filter");
         JLabel browseTitle = new JLabel("Browse Films By: ", SwingConstants.LEFT);
 
-
         String[] years = {"All Years", "2025", "2024", "2023", "2022"};
         JComboBox<String> yearDropdown = new JComboBox<>(years);
 
@@ -55,7 +56,6 @@ public class LoggedInView {
         JComboBox<String> ratingDropdown = new JComboBox<>(ratings);
 
         JTextField searchField = new JTextField(10);
-
         JLabel findFilm = new JLabel("Find Film: ");
 
         filterPanel.add(browseTitle);
@@ -65,9 +65,6 @@ public class LoggedInView {
         filterPanel.add(filterButton);
         filterPanel.add(findFilm);
         filterPanel.add(searchField);
-
-        JPanel searchPanel = new JPanel();
-        searchPanel.setPreferredSize(new Dimension(800, 50));
 
         JPanel popularFilmPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         popularFilmPanel.setBackground(new Color(255, 255, 224));
@@ -90,16 +87,14 @@ public class LoggedInView {
                 "https://image.tmdb.org/t/p/original/bYe2ZjUhb4Kje0BpWE6kN34u2hv.jpg"
         };
 
-        JPanel moviePanel = new JPanel();
-        moviePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 10));
+        JPanel moviePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         moviePanel.setBackground(new Color(255, 255, 224));
 
-        for (String movie: moviePosters) {
+        for (String movie : moviePosters) {
             try {
                 ImageIcon icon = new ImageIcon(new URL(movie));
                 Image scaled = icon.getImage().getScaledInstance(200, 300, Image.SCALE_SMOOTH);
-                JLabel movieLabel = new JLabel(new ImageIcon(scaled));
-                moviePanel.add(movieLabel);
+                moviePanel.add(new JLabel(new ImageIcon(scaled)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -122,11 +117,7 @@ public class LoggedInView {
         backgroundPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         backgroundPanel.add(popularFilmPanel);
         backgroundPanel.add(scrollPane);
-        frame.add(backgroundPanel);
 
-        frame.setVisible(true);
-
-
-
+        add(backgroundPanel);
     }
 }

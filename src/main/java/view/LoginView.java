@@ -1,127 +1,140 @@
 package view;
 
-import data_access.FileUserDataAccessObject;
-import entity.UserFactory;
-import service.AuthService;
+import interface_adapter.login.LoginController;
+import interface_adapter.login.LoginViewModel;
+import interface_adapter.login.LoginState;
+
+import interface_adapter.signup.SignupController;
+import interface_adapter.signup.SignupViewModel;
 
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Standalone login / signup window for your part.
- * Run main() here to test auth flow without touching AppBuilder.
- */
 public class LoginView extends JFrame {
 
-    private final AuthService authService;
+    private final LoginController loginController;
+    private final LoginViewModel loginViewModel;
 
-    private JTextField loginUsernameField;
-    private JPasswordField loginPasswordField;
-    private JTextField signupUsernameField;
-    private JPasswordField signupPasswordField;
+    private final SignupController signupController;
+    private final SignupViewModel signupViewModel;
 
-    public LoginView() {
-        UserFactory userFactory = new UserFactory();
-        FileUserDataAccessObject userDAO =
-                new FileUserDataAccessObject("users.txt", userFactory);
-        this.authService = new AuthService(userDAO, userFactory);
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private JButton loginButton;
+    private JButton signupButton;
+    private JButton cancelButton;
 
-        setTitle("CineSphere - Login");
+    private JLabel errorLabel;
+
+    public LoginView(LoginController loginController,
+                     LoginViewModel loginViewModel,
+                     SignupController signupController,
+                     SignupViewModel signupViewModel) {
+
+        this.loginController = loginController;
+        this.loginViewModel = loginViewModel;
+        this.signupController = signupController;
+        this.signupViewModel = signupViewModel;
+
+        setTitle("log in");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setSize(340, 180);
         setLocationRelativeTo(null);
+        setResizable(false);
 
-        initUI();
+        buildUI();
+        bindListeners();
     }
 
-    private void initUI() {
-        JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Log in", buildLoginPanel());
-        tabs.addTab("Sign up", buildSignupPanel());
-        add(tabs);
+    private void buildUI() {
+        JPanel root = new JPanel(new BorderLayout());
+        root.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // --- form panel (Username / Password) ---
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(4, 4, 4, 4);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Row 0: Username
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        formPanel.add(new JLabel("Username"), gbc);
+
+        gbc.gridx = 1;
+        usernameField = new JTextField(15);
+        formPanel.add(usernameField, gbc);
+
+        // Row 1: Password
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        formPanel.add(new JLabel("Password"), gbc);
+
+        gbc.gridx = 1;
+        passwordField = new JPasswordField(15);
+        formPanel.add(passwordField, gbc);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+
+        loginButton = new JButton("log in");
+        signupButton = new JButton("sign up");
+        cancelButton = new JButton("cancel");
+
+        buttonPanel.add(loginButton);
+        buttonPanel.add(signupButton);
+        buttonPanel.add(cancelButton);
+
+        // --- error label under buttons ---
+        errorLabel = new JLabel(" ");
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JPanel southPanel = new JPanel(new BorderLayout());
+        southPanel.add(buttonPanel, BorderLayout.CENTER);
+        southPanel.add(errorLabel, BorderLayout.SOUTH);
+
+        root.add(formPanel, BorderLayout.CENTER);
+        root.add(southPanel, BorderLayout.SOUTH);
+
+        // enter triggers "log in"
+        getRootPane().setDefaultButton(loginButton);
+
+        setContentPane(root);
     }
 
-    private JPanel buildLoginPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.insets = new Insets(5, 5, 5, 5);
-        c.fill = GridBagConstraints.HORIZONTAL;
-
-        loginUsernameField = new JTextField(20);
-        loginPasswordField = new JPasswordField(20);
-
-        JButton loginButton = new JButton("Log in");
+    private void bindListeners() {
+        // login button
         loginButton.addActionListener(e -> handleLogin());
 
-        c.gridx = 0; c.gridy = 0; panel.add(new JLabel("Username:"), c);
-        c.gridx = 1; panel.add(loginUsernameField, c);
-
-        c.gridx = 0; c.gridy = 1; panel.add(new JLabel("Password:"), c);
-        c.gridx = 1; panel.add(loginPasswordField, c);
-
-        c.gridx = 0; c.gridy = 2; c.gridwidth = 2;
-        panel.add(loginButton, c);
-
-        return panel;
-    }
-
-    private JPanel buildSignupPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.insets = new Insets(5, 5, 5, 5);
-        c.fill = GridBagConstraints.HORIZONTAL;
-
-        signupUsernameField = new JTextField(20);
-        signupPasswordField = new JPasswordField(20);
-
-        JButton signupButton = new JButton("Sign up");
+        // sign up button (reuses same username/password fields)
         signupButton.addActionListener(e -> handleSignup());
 
-        c.gridx = 0; c.gridy = 0; panel.add(new JLabel("Username:"), c);
-        c.gridx = 1; panel.add(signupUsernameField, c);
+        // cancel button: close app
+        cancelButton.addActionListener(e -> dispose());
 
-        c.gridx = 0; c.gridy = 1; panel.add(new JLabel("Password:"), c);
-        c.gridx = 1; panel.add(signupPasswordField, c);
-
-        c.gridx = 0; c.gridy = 2; c.gridwidth = 2;
-        panel.add(signupButton, c);
-
-        return panel;
+        // listen for login errors and show them in the red label
+        loginViewModel.addPropertyChangeListener(evt -> {
+            if ("state".equals(evt.getPropertyName())) {
+                LoginState state = (LoginState) evt.getNewValue();
+                String message = state.getErrorMessage();
+                if (message != null && !message.isEmpty()) {
+                    errorLabel.setText(message);
+                } else {
+                    errorLabel.setText(" ");
+                }
+            }
+        });
     }
 
     private void handleLogin() {
-        String u = loginUsernameField.getText().trim();
-        String p = new String(loginPasswordField.getPassword());
-        try {
-            authService.login(u, p);
-            JOptionPane.showMessageDialog(this, "Login successful!");
-            openLoggedInView();
-        } catch (IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(),
-                    "Login failed", JOptionPane.ERROR_MESSAGE);
-        }
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+        loginController.execute(username, password);
     }
 
     private void handleSignup() {
-        String u = signupUsernameField.getText().trim();
-        String p = new String(signupPasswordField.getPassword());
-        try {
-            authService.signUp(u, p);
-            JOptionPane.showMessageDialog(this, "Account created!");
-            openLoggedInView();
-        } catch (IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(),
-                    "Sign up failed", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void openLoggedInView() {
-        this.dispose();                    // close login window
-        LoggedInView.main(new String[]{}); // open the logged-in screen
-    }
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new LoginView().setVisible(true));
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+        signupController.execute(username, password);
     }
 }

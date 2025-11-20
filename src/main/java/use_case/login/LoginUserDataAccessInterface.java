@@ -3,9 +3,12 @@ package use_case.login;
 import entity.User;
 
 public interface LoginUserDataAccessInterface {
+
     boolean existsByName(String username);
+
     User get(String username);
 
-    void setCurrentUsername(String name);
+    void setCurrentUsername(String username);
+
     String getCurrentUsername();
 }
