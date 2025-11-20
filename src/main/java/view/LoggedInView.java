@@ -1,8 +1,14 @@
 package view;
 
+import data_access.TmdbMovieDataAccessObject;
+import entity.Movie;
+import use_case.movie.MovieDataAccessInterface;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoggedInView extends JFrame {
 
