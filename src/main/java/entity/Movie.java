@@ -1,12 +1,14 @@
 package entity;
 
-public class Movie {
-    private final int film_id;
-    private final String film_name;
 
-    public Movie(int filmId, String filmName) {
-        film_id = filmId;
-        film_name = filmName;
+public class Movie {
+
+    private String title;
+    private String posterPath;
+
+    public Movie(String title, String posterPath) {
+        this.title = title;
+        this.posterPath = posterPath;
     }
 
     public String getFilmName() {
@@ -14,5 +16,13 @@ public class Movie {
     }
     public int getFilmId() {
         return film_id;
+    public String getTitle() {
+
+        return title;
+    }
+
+    public String getPosterPath() {
+
+        return posterPath;
     }
 }
