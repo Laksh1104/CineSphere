@@ -1,4 +1,4 @@
-package view;
+package controller;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

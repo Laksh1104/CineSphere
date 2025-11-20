@@ -3,15 +3,15 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
-import okhttp3.*;
-import org.json.*;
+
+import controller.SearchFilm;
 
 public class LoggedInView {
 
 
         public static void main(String[] args) {
             JFrame frame = new JFrame("Background Display");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setSize(900, 800);
 
             JPanel backgroundPanel = new JPanel();
